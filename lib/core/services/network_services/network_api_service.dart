@@ -1,5 +1,5 @@
 import 'package:bloc_arct/core/constants/app_urls.dart';
-import 'package:bloc_arct/core/services/network_servises/base_api_services.dart';
+import 'package:bloc_arct/core/services/network_services/base_api_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/framework.dart';
