@@ -46,7 +46,7 @@ class NetworkApiService extends BaseApiServices {
         print(response.data);
       }
 
-      responseJson = returResponse(response, context);
+      responseJson = returnResponse(response, context);
     } on DioException catch (e) {
       throw ('Exception=========== $e');
     } on SocketException {
@@ -68,7 +68,7 @@ class NetworkApiService extends BaseApiServices {
     try {
       final response = await dio.post(url, data: payload);
 
-      responseJson = returResponse(response, context);
+      responseJson = returnResponse(response, context);
     } on DioException catch (e) {
       throw ('Exception ======$e');
     }
@@ -76,18 +76,48 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future<dynamic> updateApi(payload, url, BuildContext context) {
-    // TODO: implement updateApi
-    throw UnimplementedError();
+  Future<dynamic> updateApi(payload, url, BuildContext context) async {
+    if (kDebugMode) {
+      print('url');
+      print('payload======${payload.toString()}');
+    }
+
+    Dio dio = Dio(await getBaseOptions());
+
+    dynamic responseJson;
+
+    try {
+      final response = await dio.put(url, data: payload);
+      returnResponse(response, context);
+    } on DioException catch (e) {
+      throw ('error========$e');
+    } on SocketException {
+      throw InternetException();
+    }
+    return responseJson;
   }
 
   @override
-  Future<dynamic> deleteApi(payload, BuildContext context) {
-    // TODO: implement deleteApi
-    throw UnimplementedError();
+  Future<dynamic> deleteApi(payload, url, BuildContext context) async {
+    if (kDebugMode) {
+      print(url);
+    }
+
+    Dio dio = Dio(await getBaseOptions());
+
+    dynamic responseJson;
+    try {
+      final response = await dio.delete(url);
+      responseJson = returnResponse(response, context);
+    } on DioException catch (e) {
+      throw ('error=======$e');
+    } on SocketException {
+      throw InternetException();
+    }
+    return responseJson;
   }
 
-  dynamic returResponse(Response response, context) async {
+  dynamic returnResponse(Response response, context) async {
     switch (response.statusCode) {
       case 200:
         dynamic responseJson = response.data;
